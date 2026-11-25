@@ -22,7 +22,7 @@ func main() {
 	listenAddress := flag.String("listen", "127.0.0.1:9878", "FIX acceptor address")
 	senderCompID := flag.String("sender-comp-id", "SIMULATOR", "CompID of the gateway (tag 49)")
 	heartbeat := flag.Duration("heartbeat", 30*time.Second, "default heartbeat interval")
-	streamDirectory := flag.String("stream-dir", "", "datafeedfs stream directory: <dir>/<SYMBOL>/<day>.csv")
+	streamDirectory := flag.String("stream-dir", "", "datafeedfs stream directory: <dir>/<SYMBOL>/<day>.parquet or .csv")
 	day := flag.String("day", "", "trading day, YYYY-MM-DD")
 	symbols := flag.String("symbols", "", "comma separated symbols")
 	model := flag.String("model", "exact", "fill model: pessimistic, exact or probabilistic")
@@ -58,7 +58,11 @@ func main() {
 		if symbol == "" {
 			continue
 		}
-		reader, closer, err := feed.OpenCSV(filepath.Join(*streamDirectory, symbol, *day+".csv"), symbol)
+		path := filepath.Join(*streamDirectory, symbol, *day+".parquet")
+		if _, statErr := os.Stat(path); statErr != nil {
+			path = filepath.Join(*streamDirectory, symbol, *day+".csv")
+		}
+		reader, closer, err := feed.Open(path, symbol)
 		if err != nil {
 			log.Fatalf("open feed: %v", err)
 		}
