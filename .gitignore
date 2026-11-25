@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+*.parquet
+*.feather
+*.ubj
+*.npy
+market_simulation
+*.test
+*.log
+data/
+out/
+docs/
