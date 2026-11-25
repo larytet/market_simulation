@@ -108,6 +108,9 @@ func (current *session) handleLogon(message *Message, stopHeartbeats chan struct
 	reply.Set(TagHeartBtInt, strconv.Itoa(int(current.heartbeatInterval/time.Second)))
 	current.send(&reply)
 	go current.heartbeatLoop(stopHeartbeats)
+	if callback := current.server.config.OnLogon; callback != nil {
+		callback(counterparty)
+	}
 	return nil
 }
 

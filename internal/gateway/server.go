@@ -29,6 +29,7 @@ type Config struct {
 	DefaultHeartbeatInterval time.Duration
 	Clock                    Clock
 	EngineFactory            engine.Factory
+	OnLogon                  func(counterpartyID string) // called after each successful logon
 }
 
 // Server accepts FIX sessions, one per algorithm.

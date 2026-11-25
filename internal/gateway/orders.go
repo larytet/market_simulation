@@ -107,7 +107,11 @@ func (current *session) sendReport(report engine.Report) {
 		message.Set(TagMsgType, MsgTypeOrderCancelReject)
 		message.Set(TagOrdStatus, "8")
 		message.Set(TagCxlRejResponseTo, report.ResponseTo)
-		message.Set(TagCxlRejReason, "1")
+		reason := report.RejectReason
+		if reason == "" {
+			reason = "1"
+		}
+		message.Set(TagCxlRejReason, reason)
 		message.Set(TagText, report.Text)
 		current.send(&message)
 		return
@@ -142,6 +146,13 @@ func (current *session) sendReport(report engine.Report) {
 	}
 	if report.Text != "" {
 		message.Set(TagText, report.Text)
+	}
+	if report.LastQuantity > 0 {
+		message.Set(TagCommission, strconv.FormatFloat(report.Commission, 'f', 4, 64))
+		message.Set(TagCommType, "3")
+		if report.Liquidity != "" {
+			message.Set(TagLiquidity, report.Liquidity)
+		}
 	}
 	if report.FillProbability > 0 {
 		message.Set(TagFillProbability, strconv.FormatFloat(report.FillProbability, 'f', 4, 64))

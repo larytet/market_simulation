@@ -1,0 +1,28 @@
+# End to end test: the simulator replays the sample feed, the sample algorithm trades it over FIX.
+# Run: e2e/run.sh   (exit code 0 when the algorithm sees the expected fills)
+services:
+  simulator:
+    build:
+      context: .
+      target: simulate
+    command:
+      - --listen=0.0.0.0:9878
+      - --stream-dir=/data/stream
+      - --day=2026-11-20
+      - --symbols=TEST
+      - --model=exact
+      - --speed=20
+      - --start-delay=300ms
+      - --out=/out
+    volumes:
+      - ./e2e/data:/data:ro
+      - ./e2e/out:/out
+  algo:
+    build:
+      context: .
+      target: algo
+    command:
+      - --addr=simulator:9878
+      - --timeout=60s
+    depends_on:
+      - simulator

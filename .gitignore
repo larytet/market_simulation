@@ -9,6 +9,7 @@ __pycache__/
 market_simulation
 *.test
 *.log
-data/
+/data/
 out/
 docs/
+e2e/out/

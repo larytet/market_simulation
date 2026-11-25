@@ -62,6 +62,9 @@ type Report struct {
 	CancelReject    bool   // true: send OrderCancelReject (35=9) instead of ExecutionReport
 	ResponseTo      string // for CancelReject: 1 cancel request, 2 replace request (FIX tag 434)
 	FillProbability float64
+	Commission      float64 // commission of this fill (FIX tag 12, absolute)
+	Liquidity       string  // A: our order added liquidity, R: removed liquidity
+	RejectReason    string  // FIX tag 102 (cancel reject) or 103 (reject): 0 too late / 1 unknown order
 	QueueModel      string
 	EventTime       time.Time
 }

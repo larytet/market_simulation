@@ -8,6 +8,8 @@ const (
 	TagBodyLength       = 9
 	TagCheckSum         = 10
 	TagClientOrderID    = 11
+	TagCommission       = 12
+	TagCommType         = 13
 	TagCumQty           = 14
 	TagCurrency         = 15
 	TagEndSeqNo         = 16
@@ -49,6 +51,7 @@ const (
 	TagCxlRejResponseTo = 434
 	TagFillProbability  = 9001
 	TagQueueModel       = 9002
+	TagLiquidity        = 9003
 )
 
 // Message types.
